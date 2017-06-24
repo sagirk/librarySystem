@@ -1,0 +1,69 @@
+<script src="https://rawgit.com/sagirk/simpleTest/master/simpletest.js"></script>
+<script src="./librarySystem.js"></script>
+<script>
+tests({
+  'It should store and load libraries with no dependencies.': function () {
+    librarySystem('app', [], function() {
+      return 'app';
+    });
+    eq(librarySystem('app'), 'app');
+  },
+  'It should store and load libraries with one dependency.': function () {
+    librarySystem('dependency', [], function() {
+      return 'loaded dependency';
+    });
+    librarySystem('app', ['dependency'], function(dependency) {
+      return 'app with ' + dependency;
+    });
+    eq(librarySystem('app'), 'app with loaded dependency');
+  },
+  'It should store and load libraries with more than one dependency.': function () {
+    librarySystem('name', [], function() {
+      return 'Gordon';
+    });
+    librarySystem('company', [], function() {
+      return 'Watch and Code';
+    });
+    librarySystem('workBlurb', ['name', 'company'], function(name, company) {
+      return name + ' works at ' + company;
+    });
+    eq(librarySystem('workBlurb'), 'Gordon works at Watch and Code');
+  },
+
+  'It should load libraries out of order.': function () {
+    librarySystem('workBlurb', ['name', 'company'], function(name, company) {
+      return name + ' works at ' + company;
+    });
+    librarySystem('name', [], function() {
+      return 'Gordon';
+    });
+    librarySystem('company', [], function() {
+      return 'Watch and Code';
+    });
+    eq(librarySystem('workBlurb'), 'Gordon works at Watch and Code');
+  },
+
+  'It should run callback only once for each library.': function () {
+    var numberOfTimesCallbackHasRun = 0;
+    librarySystem('app', [], function() {
+      numberOfTimesCallbackHasRun++;
+      return 'app';
+    });
+    librarySystem('app');
+    librarySystem('app');
+    eq(numberOfTimesCallbackHasRun, 1);
+  },
+
+  'If librarySystem is invoked in neither store nor load mode, it should throw TypeError.': function () {
+    var isTypeError = false;
+    try {
+      librarySystem('app', function() {
+        return 'app';
+      });
+    } catch(e) {
+      isTypeError = (e instanceof TypeError);
+    }
+    eq(isTypeError, true);
+  }
+});
+</script>
