@@ -31,19 +31,21 @@
       // Fetch the library from cache.
       var libraryWithRequiredDependencies = libraryStorage[libraryName].cacheStorage;
 
-      // If the library is not found in cache, load it and store in cache.
+      // If the library is not in cache yet, load it and store in cache.
       if (!libraryWithRequiredDependencies) {
-        // Create aliases for convenience.
+        // Retrieve dependencies from the library container.
         var dependencies  = libraryStorage[libraryName].dependencyStorage;
+        // Retrieve libraryCallback from the library container.
         var libraryCallback = libraryStorage[libraryName].callbackStorage;
 
-        // If the library has dependencies, load them before the library.
+        // If the library has dependencies, load them before loading itself.
+        var loadedDependencies = [];
         if (dependencies.length > 0) {
-          var loadedDependencies = [];
           loadedDependencies = dependencies.map(function dependencyLoader(dependencyName) {
             return librarySystem(dependencyName);
           });
         }
+
         // Load library with required dependencies.
         libraryWithRequiredDependencies = libraryCallback.apply(null, loadedDependencies);
         // Cache loaded library.
