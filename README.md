@@ -1,2 +1,2 @@
 # librarySystem
-A basic vanillaJS implementation of the AMD module system.
+A test-driven vanillaJS implementation of RequireJS module loader system.
