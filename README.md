@@ -1,2 +1,2 @@
 # librarySystem
-A function for loading libraries (modules).
+A basic vanillaJS implementation of the AMD module system.
