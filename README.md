@@ -1,2 +1,2 @@
 # librarySystem
-A function for loading libraries (modules).
+A test-driven vanillaJS implementation of RequireJS module loader system.
