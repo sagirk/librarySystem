@@ -1,2 +1,2 @@
 # librarySystem
-A test-driven vanillaJS implementation of RequireJS module loader system.
+A test-driven vanillaJS implementation of the RequireJS module system.
