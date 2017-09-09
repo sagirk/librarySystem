@@ -67,19 +67,19 @@
 
 tests({
   'It should store and load libraries with no dependencies.': function () {
-    librarySystem('app', [], function() {
+    librarySystem('first app', [], function() {
       return 'app';
     });
-    eq(librarySystem('app'), 'app');
+    eq(librarySystem('first app'), 'app');
   },
   'It should store and load libraries with one dependency.': function () {
     librarySystem('dependency', [], function() {
       return 'loaded dependency';
     });
-    librarySystem('app', ['dependency'], function(dependency) {
+    librarySystem('second app', ['dependency'], function(dependency) {
       return 'app with ' + dependency;
     });
-    eq(librarySystem('app'), 'app with loaded dependency');
+    eq(librarySystem('second app'), 'app with loaded dependency');
   },
   'It should store and load libraries with more than one dependency.': function () {
     librarySystem('name', [], function() {
@@ -95,33 +95,33 @@ tests({
   },
 
   'It should load libraries out of order.': function () {
-    librarySystem('workBlurb', ['name', 'company'], function(name, company) {
+    librarySystem('anotherWorkBlurb', ['anotherName', 'anotherCompany'], function(name, company) {
       return name + ' works at ' + company;
     });
-    librarySystem('name', [], function() {
-      return 'Gordon';
+    librarySystem('anotherName', [], function() {
+      return 'Sagir';
     });
-    librarySystem('company', [], function() {
-      return 'Watch and Code';
+    librarySystem('anotherCompany', [], function() {
+      return 'IBM';
     });
-    eq(librarySystem('workBlurb'), 'Gordon works at Watch and Code');
+    eq(librarySystem('anotherWorkBlurb'), 'Sagir works at IBM');
   },
 
   'It should run callback only once for each library.': function () {
     var numberOfTimesCallbackHasRun = 0;
-    librarySystem('app', [], function() {
+    librarySystem('third app', [], function() {
       numberOfTimesCallbackHasRun++;
       return 'app';
     });
-    librarySystem('app');
-    librarySystem('app');
+    librarySystem('third app');
+    librarySystem('third app');
     eq(numberOfTimesCallbackHasRun, 1);
   },
 
   'If librarySystem is invoked in neither store nor load mode, it should throw TypeError.': function () {
     var isTypeError = false;
     try {
-      librarySystem('app', function() {
+      librarySystem('fourth app', function() {
         return 'app';
       });
     } catch(e) {
